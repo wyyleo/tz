@@ -1,42 +1,5 @@
 News for the tz database
 
-Unreleased, experimental changes
-
-  Changes to future timestamps
-
-    Morocco's spring-forward after Ramadan is now predicted to occur
-    no sooner than two days after Ramadan, instead of one day.
-    (Thanks to Milamber.)  The first altered prediction is for 2023,
-    now predicted to spring-forward on April 30 instead of April 23.
-
-  Changes to past timestamps
-
-    Correct several transitions for Hungary for 1918/1983.
-    For example, the 1983-09-25 fall-back was at 01:00, not 03:00.
-    (Thanks to Géza Nyáry.)  Also, the 1890 transition to standard
-    time was on 11-01, not 10-01 (thanks to Michael Deckers).
-
-    The 1891 French transition was on March 16, not March 15.  The
-    1911-03-11 French transition was at midnight, not a minute later.
-    Monaco's transitions were on 1892-06-01 and 1911-03-29, not
-    1891-03-15 and 1911-03-11.  (Thanks to Michael Deckers.)
-
-  Changes to code
-
-    zic now defaults to '-b slim' instead of to '-b fat'.
-
-    zic's new '-l -' and '-p -' options uninstall any existing
-    localtime and posixrules files, respectively.
-
-    The undocumented and ineffective tzsetwall function has been
-    removed.
-
-  Changes to build procedure
-
-    The Makefile now defaults POSIXRULES to '-', so the posixrules
-    feature (obsolete as of 2019b) is no longer installed by default.
-
-
 Release 2020a - 2020-04-23 16:03:47 -0700
 
   Briefly:

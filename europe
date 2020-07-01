@@ -606,13 +606,13 @@ Rule	C-Eur	1944	only	-	Oct	 2	 2:00s	0	-
 # corrected in version 2008d). The circumstantial evidence is simply the
 # tz database itself, as seen below:
 #
-# Zone Europe/Paris ...
+# Zone Europe/Paris 0:09:21 - LMT 1891 Mar 15  0:01
 #    0:00 France WE%sT 1945 Sep 16  3:00
 #
-# Zone Europe/Monaco ...
+# Zone Europe/Monaco 0:29:32 - LMT 1891 Mar 15
 #    0:00 France WE%sT 1945 Sep 16  3:00
 #
-# Zone Europe/Belgrade ...
+# Zone Europe/Belgrade 1:22:00 - LMT 1884
 #    1:00 1:00 CEST 1945 Sep 16  2:00s
 #
 # Rule France 1945 only - Sep 16  3:00 0 -
@@ -1326,54 +1326,6 @@ Link	Europe/Helsinki	Europe/Mariehamn
 # Françoise Gauquelin, Problèmes de l'heure résolus en astrologie,
 # Guy Trédaniel, Paris 1987
 
-# From Michael Deckers (2020-06-11):
-# the law of 1891 <https://gallica.bnf.fr/ark:/12148/bpt6k64415343.texteImage>
-# was published on 1891-03-15, so it could only take force on 1891-03-16.
-
-# From Michael Deckers (2020-06-10):
-# Le Gaulois, 1911-03-11, page 1/6, online at
-# https://www.retronews.fr/societe/echo-de-presse/2018/01/29/1911-change-lheure-de-paris
-# ... [ Instantly, all pressure driven clock dials halted...  Nine minutes and
-#       twenty-one seconds later the hands resumed their circular motion. ]
-# There are also precise reports about how the change was prepared in train
-# stations: all the publicly visible clocks stopped at midnight railway time
-# (or were covered), only the chief of service had a watch, labeled
-# "Heure ancienne", that he kept running until it reached 00:04:21, when
-# he announced "Heure nouvelle".  See the "Le Petit Journal 1911-03-11".
-# https://gallica.bnf.fr/ark:/12148/bpt6k6192911/f1.item.zoom
-#
-# From Michael Deckers (2020-06-12):
-# That "all French clocks stopped" for 00:09:21 is a misreading of French
-# newspapers; this sort of adjustment applies only to certain
-# remote-controlled clocks ("pendules pneumatiques", of which there existed
-# perhaps a dozen in Paris, and which simply could not be set back remotely),
-# but not to all the clocks in all French towns and villages.  For instance,
-# the following story in the "Courrier de Saône-et-Loire" 1911-03-11, page 2:
-# only works if legal time was stepped back (was not monotone): ...
-#   [One can observe that children who had been born at midnight less 5
-#    minutes and who had died at midnight of the old time, would turn out to
-#    be dead before being born, time having been set back and having
-#    suppressed 9 minutes and 25 seconds of their existence, that is, more
-#    than they could spend.]
-#
-# From Paul Eggert (2020-06-12):
-# French time in railway stations was legally five minutes behind civil time,
-# which explains why railway "old time" ran to 00:04:21 instead of to 00:09:21.
-# The law's text (which Michael Deckers noted is at
-# <https://gallica.bnf.fr/ark:/12148/bpt6k2022333z/f2>) says only that
-# at 1911-03-11 00:00 legal time was that of Paris mean time delayed by
-# nine minutes and twenty-one seconds, and does not say how the
-# transition from Paris mean time was to occur.
-#
-# tzdb has no way to represent stopped clocks.  As the railway practice
-# was to keep a watch running on "old time" to decide when to restart
-# the other clocks, this could be modeled as a transition for "old time" at
-# 00:09:21.  However, since the law was ambiguous and clocks outside railway
-# stations were probably done haphazardly with the popular impression being
-# that the transition was done at 00:00 "old time", simply leave the time
-# blank; this causes zic to default to 00:00 "old time" which is good enough.
-# Do something similar for the 1891-03-16 transition.  There are similar
-# problems in Algiers, Monaco and Tunis.
 
 #
 # Shank & Pottenger seem to use '24:00' ambiguously; resolve it with Whitman.
@@ -1437,11 +1389,13 @@ Rule	France	1945	only	-	Sep	16	 3:00	0	-
 # go with Excoffier's 28/3/76 0hUT and 25/9/76 23hUT.
 Rule	France	1976	only	-	Mar	28	 1:00	1:00	S
 Rule	France	1976	only	-	Sep	26	 1:00	0	-
-# Howse writes that the time in France was officially based
+# Shanks & Pottenger give 0:09:20 for Paris Mean Time, and Whitman 0:09:05,
+# but Howse quotes the actual French legislation as saying 0:09:21.
+# Go with Howse.  Howse writes that the time in France was officially based
 # on PMT-0:09:21 until 1978-08-09, when the time base finally switched to UTC.
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
-Zone	Europe/Paris	0:09:21 -	LMT	1891 Mar 16
-			0:09:21	-	PMT	1911 Mar 11 # Paris Mean Time
+Zone	Europe/Paris	0:09:21 -	LMT	1891 Mar 15  0:01
+			0:09:21	-	PMT	1911 Mar 11  0:01 # Paris MT
 # Shanks & Pottenger give 1940 Jun 14 0:00; go with Excoffier and Le Corre.
 			0:00	France	WE%sT	1940 Jun 14 23:00
 # Le Corre says Paris stuck with occupied-France time after the liberation;
@@ -1557,69 +1511,38 @@ Zone	Europe/Athens	1:34:52 -	LMT	1895 Sep 14
 			2:00	EU	EE%sT
 
 # Hungary
-
-# From Michael Deckers (2020-06-09):
-# an Austrian encyclopedia of railroads of 1913, online at
-# http://www.zeno.org/Roell-1912/A/Eisenbahnzeit
-# says that the switch [to CET] happened on 1890-11-01.
-
-# From Géza Nyáry (2020-06-07):
-# Data for 1918-1983 are based on the archive database of Library Hungaricana.
-# The dates are collected from original, scanned governmental orders,
-# bulletins, instructions and public press.
-# [See URLs below.]
-
+# From Paul Eggert (2014-07-15):
+# Dates for 1916-1945 are taken from:
+# Oross A. Jelen a múlt jövője: a nyári időszámítás Magyarországon 1916-1945.
+# National Archives of Hungary (2012-10-29).
+# http://mnl.gov.hu/a_het_dokumentuma/a_nyari_idoszamitas_magyarorszagon_19161945.html
+# This source does not always give times, which are taken from Shanks
+# & Pottenger (which disagree about the dates).
 # Rule	NAME	FROM	TO	TYPE	IN	ON	AT	SAVE	LETTER/S
-# https://library.hungaricana.hu/hu/view/OGYK_RT_1918/?pg=238
-# https://library.hungaricana.hu/hu/view/OGYK_RT_1919/?pg=808
-# https://library.hungaricana.hu/hu/view/OGYK_RT_1920/?pg=201
-Rule	Hungary	1918	1919	-	Apr	15	 2:00	1:00	S
-Rule	Hungary	1918	1920	-	Sep	Mon>=15	 3:00	0	-
-Rule	Hungary	1920	only	-	Apr	 5	 2:00	1:00	S
-# https://library.hungaricana.hu/hu/view/OGYK_RT_1945/?pg=882
+Rule	Hungary	1918	only	-	Apr	 1	 3:00	1:00	S
+Rule	Hungary	1918	only	-	Sep	16	 3:00	0	-
+Rule	Hungary	1919	only	-	Apr	15	 3:00	1:00	S
+Rule	Hungary	1919	only	-	Nov	24	 3:00	0	-
 Rule	Hungary	1945	only	-	May	 1	23:00	1:00	S
-Rule	Hungary	1945	only	-	Nov	 1	 1:00	0	-
-# https://library.hungaricana.hu/hu/view/Delmagyarorszag_1946_03/?pg=49
+Rule	Hungary	1945	only	-	Nov	 1	 0:00	0	-
 Rule	Hungary	1946	only	-	Mar	31	 2:00s	1:00	S
-# https://library.hungaricana.hu/hu/view/Delmagyarorszag_1946_09/?pg=54
-Rule	Hungary	1946	only	-	Oct	 7	 2:00	0	-
-# https://library.hungaricana.hu/hu/view/KulfBelfHirek_1947_04_1__001-123/?pg=90
-# https://library.hungaricana.hu/hu/view/DunantuliNaplo_1947_09/?pg=128
-# https://library.hungaricana.hu/hu/view/KulfBelfHirek_1948_03_3__001-123/?pg=304
-# https://library.hungaricana.hu/hu/view/Zala_1948_09/?pg=64
-# https://library.hungaricana.hu/hu/view/SatoraljaujhelyiLeveltar_ZempleniNepujsag_1948/?pg=53
-# https://library.hungaricana.hu/hu/view/SatoraljaujhelyiLeveltar_ZempleniNepujsag_1948/?pg=160
-# https://library.hungaricana.hu/hu/view/Delmagyarorszag_1949_09/?pg=94
+Rule	Hungary	1946	1949	-	Oct	Sun>=1	 2:00s	0	-
 Rule	Hungary	1947	1949	-	Apr	Sun>=4	 2:00s	1:00	S
-Rule	Hungary	1947	1949	-	Oct	Sun>=1	 2:00s	0	-
-# https://library.hungaricana.hu/hu/view/DTT_KOZL_TanacsokKozlonye_1954/?pg=513
-Rule	Hungary	1954	only	-	May	23	 0:00	1:00	S
-Rule	Hungary	1954	only	-	Oct	 3	 0:00	0	-
-# https://library.hungaricana.hu/hu/view/DTT_KOZL_TanacsokKozlonye_1955/?pg=398
-Rule	Hungary	1955	only	-	May	22	 2:00	1:00	S
-Rule	Hungary	1955	only	-	Oct	 2	 3:00	0	-
-# https://library.hungaricana.hu/hu/view/HevesMegyeiNepujsag_1956_06/?pg=0
-# https://library.hungaricana.hu/hu/view/EszakMagyarorszag_1956_06/?pg=6
-# https://library.hungaricana.hu/hu/view/SzolnokMegyeiNeplap_1957_04/?pg=120
-# https://library.hungaricana.hu/hu/view/PestMegyeiHirlap_1957_09/?pg=143
-Rule	Hungary	1956	1957	-	Jun	Sun>=1	 2:00	1:00	S
-Rule	Hungary	1956	1957	-	Sep	lastSun	 3:00	0	-
-# https://library.hungaricana.hu/hu/view/DTT_KOZL_TanacsokKozlonye_1980/?pg=1227
-Rule	Hungary	1980	only	-	Apr	 6	 0:00	1:00	S
-Rule	Hungary	1980	only	-	Sep	28	 1:00	0	-
-# https://library.hungaricana.hu/hu/view/Delmagyarorszag_1981_01/?pg=79
-# https://library.hungaricana.hu/hu/view/DTT_KOZL_TanacsokKozlonye_1982/?pg=115
-# https://library.hungaricana.hu/hu/view/DTT_KOZL_TanacsokKozlonye_1983/?pg=85
-Rule	Hungary	1981	1983	-	Mar	lastSun	 0:00	1:00	S
-Rule	Hungary	1981	1983	-	Sep	lastSun	 1:00	0	-
-#
+Rule	Hungary	1950	only	-	Apr	17	 2:00s	1:00	S
+Rule	Hungary	1950	only	-	Oct	23	 2:00s	0	-
+Rule	Hungary	1954	1955	-	May	23	 0:00	1:00	S
+Rule	Hungary	1954	1955	-	Oct	 3	 0:00	0	-
+Rule	Hungary	1956	only	-	Jun	Sun>=1	 0:00	1:00	S
+Rule	Hungary	1956	only	-	Sep	lastSun	 0:00	0	-
+Rule	Hungary	1957	only	-	Jun	Sun>=1	 1:00	1:00	S
+Rule	Hungary	1957	only	-	Sep	lastSun	 3:00	0	-
+Rule	Hungary	1980	only	-	Apr	 6	 1:00	1:00	S
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
-Zone	Europe/Budapest	1:16:20 -	LMT	1890 Nov  1
+Zone	Europe/Budapest	1:16:20 -	LMT	1890 Oct
 			1:00	C-Eur	CE%sT	1918
-# https://library.hungaricana.hu/hu/view/OGYK_RT_1941/?pg=1204
-			1:00	Hungary	CE%sT	1941 Apr  7 23:00
+			1:00	Hungary	CE%sT	1941 Apr  8
 			1:00	C-Eur	CE%sT	1945
-			1:00	Hungary	CE%sT	1984
+			1:00	Hungary	CE%sT	1980 Sep 28  2:00s
 			1:00	EU	CE%sT
 
 # Iceland
@@ -2082,24 +2005,11 @@ Zone	Europe/Chisinau	1:55:20 -	LMT	1880
 			2:00	Moldova	EE%sT
 
 # Monaco
-#
-# From Michael Deckers (2020-06-12):
-# In the "Journal de Monaco" of 1892-05-24, online at
-# https://journaldemonaco.gouv.mc/var/jdm/storage/original/application/b1c67c12c5af11b41ea888fb048e4fe8.pdf
-# we read: ...
-#  [In virtue of a Sovereign Ordinance of the May 13 of the current [year],
-#   legal time in the Principality will be set to, from the date of June 1,
-#   1892 onwards, to the meridian of Paris, as in France.]
-# In the "Journal de Monaco" of 1911-03-28, online at
-# https://journaldemonaco.gouv.mc/var/jdm/storage/original/application/de74ffb7db53d4f599059fe8f0ed482a.pdf
-# we read an ordinance of 1911-03-16: ...
-#  [Legal time in the Principality will be set, from the date of promulgation
-#   of the present ordinance, to legal time in France....  Consequently, legal
-#   time will be retarded by 9 minutes and 21 seconds.]
-#
+# Shanks & Pottenger give 0:09:20 for Paris Mean Time; go with Howse's
+# more precise 0:09:21.
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
-Zone	Europe/Monaco	0:29:32 -	LMT	1892 Jun  1
-			0:09:21	-	PMT	1911 Mar 29 # Paris Mean Time
+Zone	Europe/Monaco	0:29:32 -	LMT	1891 Mar 15
+			0:09:21	-	PMT	1911 Mar 11 # Paris Mean Time
 			0:00	France	WE%sT	1945 Sep 16  3:00
 			1:00	France	CE%sT	1977
 			1:00	EU	CE%sT
@@ -3535,7 +3445,7 @@ Link Europe/Prague Europe/Bratislava
 # fallback transition from the next day's 00:59... to 00:00.
 
 # From Michael Deckers (2016-12-15):
-# The Royal Decree of 1900-07-26 quoted by Planesas, online at
+# The Royal Decree of 1900-06-26 quoted by Planesas, online at
 # https://www.boe.es/datos/pdfs/BOE//1900/209/A00383-00384.pdf
 # says in its article 5 (my translation):
 # These dispositions will enter into force beginning with the
@@ -4073,7 +3983,7 @@ Zone Europe/Kiev	2:02:04 -	LMT	1880
 			2:00	1:00	EEST	1991 Sep 29  3:00
 			2:00	E-Eur	EE%sT	1995
 			2:00	EU	EE%sT
-# Transcarpathia used CET 1990/1991.
+# Ruthenia used CET 1990/1991.
 # "Uzhhorod" is the transliteration of the Rusyn/Ukrainian pronunciation, but
 # "Uzhgorod" is more common in English.
 Zone Europe/Uzhgorod	1:29:12 -	LMT	1890 Oct

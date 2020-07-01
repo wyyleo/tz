@@ -1355,9 +1355,8 @@ zoneinit(struct state *sp, char const *name)
 }
 
 static void
-tzset_unlocked(void)
+tzsetlcl(char const *name)
 {
-  char const *name = getenv("TZ");
   struct state *sp = lclptr;
   int lcl = name ? strlen(name) < sizeof lcl_TZname : -1;
   if (lcl < 0
@@ -1376,6 +1375,23 @@ tzset_unlocked(void)
   }
   settzname();
   lcl_is_set = lcl;
+}
+
+#ifdef STD_INSPIRED
+void
+tzsetwall(void)
+{
+  if (lock() != 0)
+    return;
+  tzsetlcl(NULL);
+  unlock();
+}
+#endif
+
+static void
+tzset_unlocked(void)
+{
+  tzsetlcl(getenv("TZ"));
 }
 
 void

@@ -22,13 +22,13 @@ BUGEMAIL=	tz@iana.org
 #	DATAFORM=	main
 # To wait even longer for new features, use:
 #	DATAFORM=	rearguard
-# Rearguard users might also want "ZFLAGS = -b fat"; see below.
 DATAFORM=		main
 
 # Change the line below for your timezone (after finding the one you want in
 # one of the $(TDATA) source files, or adding it to a source file).
 # Alternatively, if you discover you've got the wrong timezone, you can just
-# 'zic -l -' to remove it, or 'zic -l rightzone' to change it.
+#	zic -l rightzone
+# to correct things.
 # Use the command
 #	make zonenames
 # to get a list of the values you can use for LOCALTIME.
@@ -37,30 +37,33 @@ LOCALTIME=	GMT
 
 # The POSIXRULES macro controls interpretation of nonstandard and obsolete
 # POSIX-like TZ settings like TZ='EET-2EEST' that lack DST transition rules.
-# Such a setting uses the rules in a template file to determine
-# "spring forward" and "fall back" days and times; the environment
-# variable itself specifies UT offsets of standard and daylight saving time.
+# In the reference implementation, if you want something other than Eastern
+# United States time as a template for handling these settings, you can
+# change the line below (after finding the timezone you want in the
+# one of the $(TDATA) source files, or adding it to a source file).
+# A setting like TZ='EET-2EEST' is supposed to use the rules in the
+# template file to determine "spring forward" and "fall back" days and
+# times; the environment variable itself specifies UT offsets of standard and
+# daylight saving time.
+# Alternatively, if you discover you've got the wrong timezone, you can just
+#	zic -p rightzone
+# to correct things.
+# Use the command
+#	make zonenames
+# to get a list of the values you can use for POSIXRULES.
 #
-# If POSIXRULES is '-', no template is installed; this is the default.
+# If POSIXRULES is empty, no template is installed; this is the intended
+# future default for POSIXRULES.
 #
-# Any other value for POSIXRULES is obsolete and should not be relied on, as:
+# Nonempty POSIXRULES is obsolete and should not be relied on, because:
 # * It does not work correctly in popular implementations such as GNU/Linux.
 # * It does not work in the tzdb implementation for timestamps after 2037.
 # * It is incompatible with 'zic -b slim' if POSIXRULES specifies transitions
 #   at standard time or UT rather than at local time.
 # In short, software should avoid ruleless settings like TZ='EET-2EEST'
 # and so should not depend on the value of POSIXRULES.
-#
-# If, despite the above, you want a template for handling these settings,
-# you can change the line below (after finding the timezone you want in the
-# one of the $(TDATA) source files, or adding it to a source file).
-# Alternatively, if you discover you've got the wrong timezone, you can just
-# 'zic -p -' to remove it, or 'zic -p rightzone' to change it.
-# Use the command
-#	make zonenames
-# to get a list of the values you can use for POSIXRULES.
 
-POSIXRULES=	-
+POSIXRULES=	America/New_York
 
 # Also see TZDEFRULESTRING below, which takes effect only
 # if the time zone files cannot be accessed.
@@ -250,12 +253,13 @@ LDLIBS=
 #	other than simply getting garbage data
 #  -DUSE_LTZ=0 to build zdump with the system time zone library
 #	Also set TZDOBJS=zdump.o and CHECK_TIME_T_ALTERNATIVES= below.
-#  -DZIC_BLOAT_DEFAULT=\"fat\" to default zic's -b option to "fat", and
-#	similarly for "slim".  Fat TZif files work around incompatibilities
+#  -DZIC_BLOAT_DEFAULT=\"slim\" to default zic's -b option to "slim", and
+#	similarly for "fat".  Fat TZif files work around incompatibilities
 #	and bugs in some TZif readers, notably readers that mishandle 64-bit
 #	data in TZif files.  Slim TZif files are more efficient and do not
 #	work around these incompatibilities and bugs.  If not given, the
-#	default is "slim".
+#	current default is "fat" but this is intended to change as readers
+#	requiring fat files often mishandle timestamps after 2037 anyway.
 #  -DZIC_MAX_ABBR_LEN_WO_WARN=3
 #	(or some other number) to set the maximum time zone abbreviation length
 #	that zic will accept without a warning (the default is 6)
@@ -329,8 +333,9 @@ GCC_DEBUG_FLAGS = -DGCC_LINT -g3 -O3 -fno-common \
 # add
 #	-DSTD_INSPIRED
 # to the end of the "CFLAGS=" line.  This arranges for the functions
-# "offtime", "timelocal", "timegm", "timeoff",
+# "tzsetwall", "offtime", "timelocal", "timegm", "timeoff",
 # "posix2time", and "time2posix" to be added to the time conversion library.
+# "tzsetwall" is deprecated and is intended to be removed soon; see NEWS.
 # "offtime" is like "gmtime" except that it accepts a second (long) argument
 # that gives an offset to add to the time_t when converting it.
 # "timelocal" is equivalent to "mktime".
@@ -390,7 +395,7 @@ ZIC=		$(zic) $(ZFLAGS)
 
 # To shrink the size of installed TZif files,
 # append "-r @N" to omit data before N-seconds-after-the-Epoch.
-# To grow the files and work around older application bugs, append "-b fat";
+# You can also append "-b slim" if that is not already the default;
 # see ZIC_BLOAT_DEFAULT above.
 # See the zic man page for more about -b and -r.
 ZFLAGS=

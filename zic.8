@@ -61,13 +61,15 @@ is
 .BR slim ,
 keep the output files small; this can help check for the bugs
 and incompatibilities.
-The default is
-.BR slim ,
-as software that mishandles 64-bit data typically
+Although the default is currently
+.BR fat ,
+this is intended to change in future
+.B zic
+versions, as software that mishandles the 64-bit data typically
 mishandles timestamps after the year 2038 anyway.
 Also see the
 .B \*-r
-option for another way to alter output size.
+option for another way to shrink output size.
 .TP
 .BI "\*-d " directory
 Create time conversion information files in the named directory rather than
@@ -83,12 +85,6 @@ will act as if the input contained a link line of the form
 .ti +.5i
 .ta \w'Link\0\0'u  +\w'\fItimezone\fP\0\0'u
 Link	\fItimezone\fP		localtime
-.sp
-If
-.I timezone
-is
-.BR \*- ,
-any already-existing link is removed.
 .TP
 .BI "\*-L " leapsecondfilename
 Read leap second information from the file with the given name.
@@ -113,12 +109,6 @@ and it should not be combined with
 if
 .IR timezone 's
 transitions are at standard time or Universal Time (UT) instead of local time.
-.sp
-If
-.I timezone
-is
-.BR \*- ,
-any already-existing link is removed.
 .TP
 .BR "\*-r " "[\fB@\fP\fIlo\fP][\fB/@\fP\fIhi\fP]"
 Reduce the size of output files by limiting their applicability
@@ -234,7 +224,7 @@ or that starts with
 .RE
 .SH FILES
 Input files use the format described in this section; output files use
-.BR tzfile (5)
+.IR tzfile (5)
 format.
 .PP
 Input files should be text files, that is, they should be a series of

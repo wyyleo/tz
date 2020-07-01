@@ -25,55 +25,49 @@ tzset \- initialize time conversion information
 .de q
 \\$3\*(lq\\$1\*(rq\\$2
 ..
-The
-.B tzalloc
-function
+.I Tzalloc
 allocates and returns a timezone object described by
 .BR TZ .
 If
 .B TZ
 is not a valid timezone description, or if the object cannot be allocated,
-.B tzalloc
+.I tzalloc
 returns a null pointer and sets
 .BR errno .
 .PP
-The
-.B tzfree
-function
+.I Tzfree
 frees a timezone object
 .BR tz ,
 which should have been successfully allocated by
-.BR tzalloc .
+.IR tzalloc .
 This invalidates any
 .B tm_zone
 pointers that
 .B tz
 was used to set.
 .PP
-The
-.B tzset
-function
+.I Tzset
 acts like
 .BR tzalloc(getenv("TZ")) ,
 except it saves any resulting timezone object into internal
 storage that is accessed by
-.BR localtime ,
-.BR localtime_r ,
+.IR localtime ,
+.IR localtime_r ,
 and
-.BR mktime .
+.IR mktime .
 The anonymous shared timezone object is freed by the next call to
-.BR tzset .
+.IR tzset .
 If the implied call to
 .B tzalloc
 fails,
-.B tzset
+.I tzset
 falls back on Universal Time (UT).
 .PP
 If
 .B TZ
 is null, the best available approximation to local (wall
 clock) time, as specified by the
-.BR tzfile (5)-format
+.IR tzfile (5)-format
 file
 .B localtime
 in the system time conversion information directory, is used.
@@ -82,7 +76,7 @@ If
 is the empty string,
 UT is used, with the abbreviation "UTC"
 and without leap second correction; please see
-.BR newctime (3)
+.IR newctime (3)
 for more about UT, UTC, and leap seconds.  If
 .B TZ
 is nonnull and nonempty:
@@ -102,7 +96,7 @@ it is used as an absolute pathname; otherwise,
 it is used as a pathname relative to a system time conversion information
 directory.
 The file must be in the format specified in
-.BR tzfile (5).
+.IR tzfile (5).
 .PP
 When
 .B TZ
@@ -310,7 +304,7 @@ is present in
 .BR TZ ,
 the rules specified
 by the
-.BR tzfile (5)-format
+.IR tzfile (5)-format
 file
 .B posixrules
 in the system time conversion information directory are used, with the

@@ -661,7 +661,8 @@ static const char *	tzdefault;
 static const char *	yitcommand;
 
 /* -1 if the TZif output file should be slim, 0 if default, 1 if the
-   output should be fat for backward compatibility.  The default is slim.  */
+   output should be fat for backward compatibility.  Currently the
+   default is fat, although this may change.  */
 static int bloat;
 
 static bool
@@ -671,7 +672,7 @@ want_bloat(void)
 }
 
 #ifndef ZIC_BLOAT_DEFAULT
-# define ZIC_BLOAT_DEFAULT "slim"
+# define ZIC_BLOAT_DEFAULT "fat"
 #endif
 
 int
@@ -980,7 +981,6 @@ hardlinkerr(char const *from, char const *to)
 static void
 dolink(char const *fromfield, char const *tofield, bool staysymlink)
 {
-	bool remove_only = strcmp(fromfield, "-") == 0;
 	bool todirs_made = false;
 	int link_errno;
 
@@ -988,7 +988,7 @@ dolink(char const *fromfield, char const *tofield, bool staysymlink)
 	** We get to be careful here since
 	** there's a fair chance of root running us.
 	*/
-	if (!remove_only && itsdir(fromfield)) {
+	if (itsdir(fromfield)) {
 		fprintf(stderr, _("%s: link from %s/%s failed: %s\n"),
 			progname, directory, fromfield, strerror(EPERM));
 		exit(EXIT_FAILURE);
@@ -1003,8 +1003,6 @@ dolink(char const *fromfield, char const *tofield, bool staysymlink)
 		  progname, directory, tofield, e);
 	  exit(EXIT_FAILURE);
 	}
-	if (remove_only)
-	  return;
 	link_errno = staysymlink ? ENOTSUP : hardlinkerr(fromfield, tofield);
 	if (link_errno == ENOENT && !todirs_made) {
 	  mkdirs(tofield, true);
